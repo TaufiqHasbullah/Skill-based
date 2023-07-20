@@ -1,0 +1,18 @@
+import socket
+
+def get_quote():
+    try:
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client_socket.connect(('192.168.126.128', 8888))
+
+        quote = client_socket.recv(4096).decode('utf-8')
+        print("Quote of the Day:")
+        print(quote)
+
+    except ConnectionRefusedError:
+        print("Error: Connection refused. Make sure the server is running.")
+    finally:
+        client_socket.close()
+
+if __name__ == "__main__":
+    get_quote()
