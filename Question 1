@@ -1,0 +1,39 @@
+import socket
+
+def send_student_id(host, port, student_id):
+    try:
+        # Create a socket object
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        # Connect to the server
+        client_socket.connect((host, port))
+
+        # Convert student_id to bytes
+        student_id_bytes = student_id.encode('utf-8')
+
+        # Send the student ID to the server
+        client_socket.sendall(student_id_bytes)
+
+        # Read the server's response
+        response = client_socket.recv(1024).decode('utf-8')
+
+        # Print the server's response
+        print("Server response:", response)
+
+    except ConnectionRefusedError:
+        print("Connection refused. Please make sure the server is running.")
+    except Exception as e:
+        print("An error occurred:", e)
+    finally:
+
+        client_socket.close()
+
+if __name__ == "__main__":
+
+    server_host = "izani.synology.me"
+    server_port = 8443
+
+    student_id = "2022875962"
+
+    send_student_id(server_host, server_port, student_id)
+
