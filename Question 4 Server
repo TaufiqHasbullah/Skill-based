@@ -1,0 +1,37 @@
+import socket
+import threading
+import random
+
+# Sample quotes. You can add more quotes to this array.
+quotes = [
+    "You can't use up creativity. The more you use, the more you have. - Maya Angelou",
+    "The only thing standing between you and your goal is the story you keep telling yourself as to why you can't achieve it. - Jordan Belfort",
+    "The best way to predict the future is to invent it. - Alan Kay"
+    "Your life does not get better by chance; it gets better by change. - Jim Rohn"
+    "Opportunities don't happen. You create them. - Chris Grosser"
+]
+
+# Function to handle individual client requests.
+def handle_client(client_socket):
+    random_quote = random.choice(quotes)
+    client_socket.send(random_quote.encode('utf-8'))
+    client_socket.close()
+
+# Main server function to accept client connections.
+def start_server():
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.bind(('192.168.126.128', 8888))
+    server_socket.listen(5)
+    print("Server listening on port 8888...")
+
+    while True:
+        client_socket, addr = server_socket.accept()
+        print(f"Accepted connection from {addr[0]}:{addr[1]}")
+
+        # Create a new thread to handle the client.
+        client_handler = threading.Thread(target=handle_client, args=(client_socket,))
+        client_handler.start()
+
+# Start the server.
+if __name__ == "__main__":
+    start_server()
